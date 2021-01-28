@@ -157,11 +157,13 @@ module.exports = async (
   puppeteerArgs = [],
   puppeteerAgent = "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)"
 ) => {
+  var args = puppeteerArgs;
+  if (typeof args.push !== 'function') {
+    puppeteerArgs = args.args;
+	args = Object.assign({ headless: true }, args);
+  }
   puppeteer.use(pluginStealth());
-  const browser = await puppeteer.launch({
-    headless: true,
-    args: [...puppeteerArgs],
-  });
+  const browser = await puppeteer.launch(args);
   const page = await browser.newPage();
   page.setUserAgent(puppeteerAgent);
 
